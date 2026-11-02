@@ -1,0 +1,7 @@
+paho-mqtt
+fastapi
+uvicorn
+psycopg2-binary
+scikit-learn
+numpy
+pytest

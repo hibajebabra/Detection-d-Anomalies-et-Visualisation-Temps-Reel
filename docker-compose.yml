@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: mosquitto-broker
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-log:/mosquitto/log
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: iot-db
+    environment:
+      POSTGRES_USER: iotuser
+      POSTGRES_PASSWORD: iotpassword
+      POSTGRES_DB: iotdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  processor:
+    build: 
+      context: .
+      dockerfile: Dockerfile.processor
+    container_name: iot-processor
+    environment:
+      - DB_HOST=postgres
+      - MQTT_BROKER=mosquitto
+    depends_on:
+      - mosquitto
+      - postgres
+    restart: unless-stopped
+
+  sensor-1:
+    build:
+      context: .
+      dockerfile: Dockerfile.sensor
+    container_name: iot-sensor-1
+    depends_on:
+      - mosquitto
+    command: ["--device_id", "sensor-1", "--sensor_type", "temperature", "--anomaly_time", "60"]
+    restart: unless-stopped
+
+  sensor-2:
+    build:
+      context: .
+      dockerfile: Dockerfile.sensor
+    container_name: iot-sensor-2
+    depends_on:
+      - mosquitto
+    command: ["--device_id", "motor-1", "--sensor_type", "vibration", "--anomaly_time", "90"]
+    restart: unless-stopped
+
+  sensor-3:
+    build:
+      context: .
+      dockerfile: Dockerfile.sensor
+    container_name: iot-sensor-3
+    depends_on:
+      - mosquitto
+    command: ["--device_id", "humidity-1", "--sensor_type", "humidity", "--anomaly_time", "120"]
+    restart: unless-stopped
+
+volumes:
+  mosquitto-data:
+  mosquitto-log:
+  pg-data:

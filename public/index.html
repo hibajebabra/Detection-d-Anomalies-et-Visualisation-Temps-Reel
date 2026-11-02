@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Anomaly Detection Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <div class="pulse-dot"></div>
+                <h1>IoT Flow</h1>
+            </div>
+            <div class="status" id="connection-status">Connecting...</div>
+        </header>
+        
+        <main>
+            <div class="dashboard-header">
+                <h2>Real-time Telemetry</h2>
+                <p>Monitoring sensor streams and detecting anomalies instantly.</p>
+            </div>
+            
+            <div id="charts-grid" class="charts-grid">
+                <!-- Charts will be dynamically injected here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alerts-container" class="alerts-container">
+        <!-- Alerts will be injected here -->
+    </div>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
